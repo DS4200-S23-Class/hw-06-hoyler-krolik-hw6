@@ -1,0 +1,36 @@
+body {
+    font-family: Arial;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+
+/* center header 5 */
+h5 {
+    text-align: center;
+}
+
+.columns {
+    display: flex;
+}
+
+.virginica {
+    fill: purple;
+    opacity: 50%;
+}
+
+.versicolor {
+    fill: darkorange;
+    opacity: 50%;
+}
+
+.setosa {
+    fill: green;
+    opacity: 50%;
+}
