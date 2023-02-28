@@ -34,3 +34,10 @@ h5 {
     fill: green;
     opacity: 50%;
 }
+
+/* when elements selected */
+.selected {
+    stroke: black;
+    stroke-width: 3px;
+    opacity: 100%;
+}

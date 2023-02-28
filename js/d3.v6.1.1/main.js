@@ -1,27 +1,27 @@
 // Create the Frame dimensions
-const FRAME_HEIGHT = 500;
-const FRAME_WIDTH = 500;
-const MARGINS = {left: 50, right: 50, top: 50, bottom: 50};
+let FRAME_HEIGHT = 500;
+let FRAME_WIDTH = 500;
+let MARGINS = {left: 50, right: 50, top: 50, bottom: 50};
 
 // Add Left Scatter frame as svg
-const LEFT_SCATTER_FRAME = d3.select('.left-scatter')
+let LEFT_SCATTER_FRAME = d3.select('.left-scatter')
                     .append("svg")
                     .attr("height", FRAME_HEIGHT)
                     .attr("width", FRAME_WIDTH)
-                    .attr("id", "middle");
+                    .attr("id", "left");
 
 // Add Left Scatter frame as svg
-const MID_SCATTER_FRAME = d3.select('.mid-scatter')
+let MID_SCATTER_FRAME = d3.select('.mid-scatter')
                     .append("svg")
                     .attr("height", FRAME_HEIGHT)
                     .attr("width", FRAME_WIDTH)
                     .attr("id", "middle");
 
 // creat scatter dimensions
-const LEFT_SCATTER_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
-const LEFT_SCATTER_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
-const MID_SCATTER_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
-const MID_SCATTER_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
+let LEFT_SCATTER_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
+let LEFT_SCATTER_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
+let MID_SCATTER_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
+let MID_SCATTER_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
 
 // Reading from file and appending points
 d3.csv("data/iris.csv").then((data) => {
@@ -55,7 +55,6 @@ d3.csv("data/iris.csv").then((data) => {
 
 
     // plot the bottom and side axis
-
     LEFT_SCATTER_FRAME.append("g")
                     .attr("transform", "translate(" + MARGINS.top + "," + 
                     (LEFT_SCATTER_HEIGHT + MARGINS.top) + ")")
@@ -69,68 +68,95 @@ d3.csv("data/iris.csv").then((data) => {
                     .call(d3.axisLeft(Y_SCALE).ticks(10))
                         .attr("font-size", "12px");
 
-});
 
-// Reading from file and appending points
-d3.csv("data/iris.csv").then((data) => {
-
+    // second frame 
     // Getting max X and Y coords
-    const MAX_X = d3.max(data, (d) => 
+    const MAX_X2 = d3.max(data, (d) => 
                                 {return parseInt(d.Sepal_Width) + 1});
     
-    const MAX_Y = d3.max(data, (d) => 
+    const MAX_Y2 = d3.max(data, (d) => 
                                 {return parseInt(d.Petal_Width) + 1});
     // X coord scale function
-    const X_SCALE = d3.scaleLinear()
-                            .domain([0, (MAX_X)])
+    const X_SCALE2 = d3.scaleLinear()
+                            .domain([0, (MAX_X2)])
                             .range([0, MID_SCATTER_WIDTH]);
     
     // Y coord scale function
-    const Y_SCALE = d3.scaleLinear()
-                        .domain([0, (MAX_Y)])
+    const Y_SCALE2 = d3.scaleLinear()
+                        .domain([0, (MAX_Y2)])
                         .range([MID_SCATTER_HEIGHT, 0]);
 
 
     // plot the scatter points
-    MID_SCATTER_FRAME.selectAll("circle")
+    let myPoints;
+    myPoints = MID_SCATTER_FRAME.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
-                .attr("cx", (d) => {return (X_SCALE(d.Sepal_Width) + MARGINS.left)})
-                .attr("cy", (d) => {return (MARGINS.top + (Y_SCALE(d.Petal_Width)))})
+                .attr("cx", (d) => {return (X_SCALE2(d.Sepal_Width) + MARGINS.left)})
+                .attr("cy", (d) => {return (MARGINS.top + (Y_SCALE2(d.Petal_Width)))})
                 .attr("r", 5)
-                .attr("class", (d) => {return d.Species});
+                .attr("class", (d) => {return d.Species})
+                .attr("id", (d) => {return d.id});
+    
+
+
+    // let myPoints = MID_SCATTER_FRAME.selectAll("circle")
+    // .data(data)
+    // .enter()
+    // .append("circle")
+    //   .attr("cx", function (d) { return (d.Sepal_Length); } )
+    //   .attr("cy", function (d) { return (d.Petal_Length); } )
+    //   .attr("r", 8);
+
 
 
     // plot the bottom and side axis
-
     MID_SCATTER_FRAME.append("g")
                     .attr("transform", "translate(" + MARGINS.top + "," + 
                     (MID_SCATTER_HEIGHT + MARGINS.top) + ")")
-                    .call(d3.axisBottom(X_SCALE).ticks(8))
+                    .call(d3.axisBottom(X_SCALE2).ticks(8))
                         .attr("font-size", "12px");
 
 
     MID_SCATTER_FRAME.append("g")
                     .attr("transform", "translate(" + 
                     (MARGINS.left) + "," + (MARGINS.top) + ")")
-                    .call(d3.axisLeft(Y_SCALE).ticks(10))
+                    .call(d3.axisLeft(Y_SCALE2).ticks(10))
                         .attr("font-size", "12px");
 
-    
-    // function to add styling on brushing
-    function updateChart() {
-        console.log("This works")
-    };
         
     // Add brushing
     MID_SCATTER_FRAME
         .call(d3.brush()                 // Add the brush feature using the d3.brush function
-            .extent([[0,0], [FRAME_WIDTH,FRAME_HEIGHT]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+            .extent([[MARGINS.left, MARGINS.top], [FRAME_WIDTH + MARGINS.left,FRAME_HEIGHT + MARGINS.top]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
             .on("start brush", updateChart)); // Each time the brush selection changes, trigger the 'updateChart' function
-  
-});
 
+    // A function that return TRUE or FALSE according if a dot is in the selection or not
+    function isBrushed(brush_coords, cx, cy) {
+    let x0 = brush_coords[0][0],
+        x1 = brush_coords[1][0],
+        y0 = brush_coords[0][1],
+        y1 = brush_coords[1][1];
+        console.log(x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1);
+   return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
+};
+
+
+    // function to add styling on brushing
+    function updateChart(event) {
+
+        // let newPoints = MID_SCATTER_FRAME.selectAll("circle");
+        let extent = event.selection;
+
+        myPoints.classed("selected", (d) => { 
+            if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
+                console.log(document.getElementById(d.id))
+            }
+            return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
+        
+        });
+    };
 
 // create frame for bar chart
 const BAR = d3.select('.columns')
@@ -191,4 +217,18 @@ BAR.append("g")
         (MARGINS.left) + "," + (MARGINS.top) + ")")
     .call(d3.axisLeft(yScaleBar).ticks(11))
     .attr("font-size", "15px");
+
+
+
+
+    
+
+
+
+
+
+
+});
+
+
 
