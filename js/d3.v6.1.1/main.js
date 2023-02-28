@@ -141,9 +141,9 @@ d3.csv("data/iris.csv").then((data) => {
         let extent = event.selection;
 
         myPoints.classed("selected", (d) => { 
-            // list of visited species , use set
-            const speciesSet = new Set();
-            if (d.Species = "" )
+            // // list of visited species , use set
+            // const speciesSet = new Set();
+            // if (d.Species = "virginica" || d.Species =  )
 
             return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
         });
