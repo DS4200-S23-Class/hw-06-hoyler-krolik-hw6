@@ -132,9 +132,12 @@ d3.csv("data/iris.csv").then((data) => {
         x1 = brush_coords[1][0],
         y0 = brush_coords[0][1],
         y1 = brush_coords[1][1];
-        console.log(x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1);
    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
 };
+
+function isSpecies(brush_coords){
+    console.log(brush_coords.Species)
+}
 
 
     // function to add styling on brushing
@@ -147,7 +150,7 @@ d3.csv("data/iris.csv").then((data) => {
 
         leftPoints.classed("selected", (d) => {return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)});
 
-        bars.classed("selected", (d))
+        bars.classed("selected", (d) => {return d.Species})
     };
 
 // create frame for bar chart
@@ -212,9 +215,6 @@ BAR.append("g")
 
 });
 
-           // if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
-            //     console.log(document.getElementById(d.id))
-            // }
 
 
 

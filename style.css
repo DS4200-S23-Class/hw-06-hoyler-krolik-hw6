@@ -37,7 +37,7 @@ h5 {
 
 /* when elements selected */
 .selected {
-    stroke: black;
+    stroke: orange;
     stroke-width: 3px;
     opacity: 100%;
 }
