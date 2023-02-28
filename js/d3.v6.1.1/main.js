@@ -119,12 +119,6 @@ d3.csv("data/iris.csv").then((data) => {
             .extent([[MARGINS.left, MARGINS.top], [FRAME_WIDTH + MARGINS.left,FRAME_HEIGHT + MARGINS.top]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
             .on("start brush", updateChart)); // Each time the brush selection changes, trigger the 'updateChart' function
 
-    // // Add brushing
-    // LEFT_SCATTER_FRAME
-    //     .call(d3.brush()                 // Add the brush feature using the d3.brush function
-    //         .extent([[MARGINS.left, MARGINS.top], [FRAME_WIDTH + MARGINS.left,FRAME_HEIGHT + MARGINS.top]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    //         .on("start brush", updateChart)); // Each time the brush selection changes, trigger the 'updateChart' function
-
 
     // A function that return TRUE or FALSE according if a dot is in the selection or not
     function isBrushed(brush_coords, cx, cy) {
@@ -132,7 +126,9 @@ d3.csv("data/iris.csv").then((data) => {
         x1 = brush_coords[1][0],
         y0 = brush_coords[0][1],
         y1 = brush_coords[1][1];
-   return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
+        
+   // This return TRUE or FALSE depending on if the points is in the selected area     
+   return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    
 };
 
 
@@ -142,8 +138,7 @@ d3.csv("data/iris.csv").then((data) => {
 
         const speciesSet = new Set();
         myPoints.classed("selected", (d) => { 
-            // // list of visited species , use set
-
+            // list of visited species , use set
             if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
                 speciesSet.add(d.Species);
             }
