@@ -44,7 +44,7 @@ d3.csv("data/iris.csv").then((data) => {
 
 
     // plot the scatter points
-    LEFT_SCATTER_FRAME.selectAll("circle")
+    let leftPoints = LEFT_SCATTER_FRAME.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
@@ -88,8 +88,7 @@ d3.csv("data/iris.csv").then((data) => {
 
 
     // plot the scatter points
-    let myPoints;
-    myPoints = MID_SCATTER_FRAME.selectAll("circle")
+    let myPoints = MID_SCATTER_FRAME.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
@@ -98,18 +97,6 @@ d3.csv("data/iris.csv").then((data) => {
                 .attr("r", 5)
                 .attr("class", (d) => {return d.Species})
                 .attr("id", (d) => {return d.id});
-    
-
-
-    // let myPoints = MID_SCATTER_FRAME.selectAll("circle")
-    // .data(data)
-    // .enter()
-    // .append("circle")
-    //   .attr("cx", function (d) { return (d.Sepal_Length); } )
-    //   .attr("cy", function (d) { return (d.Petal_Length); } )
-    //   .attr("r", 8);
-
-
 
     // plot the bottom and side axis
     MID_SCATTER_FRAME.append("g")
@@ -132,6 +119,13 @@ d3.csv("data/iris.csv").then((data) => {
             .extent([[MARGINS.left, MARGINS.top], [FRAME_WIDTH + MARGINS.left,FRAME_HEIGHT + MARGINS.top]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
             .on("start brush", updateChart)); // Each time the brush selection changes, trigger the 'updateChart' function
 
+    // // Add brushing
+    // LEFT_SCATTER_FRAME
+    //     .call(d3.brush()                 // Add the brush feature using the d3.brush function
+    //         .extent([[MARGINS.left, MARGINS.top], [FRAME_WIDTH + MARGINS.left,FRAME_HEIGHT + MARGINS.top]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+    //         .on("start brush", updateChart)); // Each time the brush selection changes, trigger the 'updateChart' function
+
+
     // A function that return TRUE or FALSE according if a dot is in the selection or not
     function isBrushed(brush_coords, cx, cy) {
     let x0 = brush_coords[0][0],
@@ -145,17 +139,15 @@ d3.csv("data/iris.csv").then((data) => {
 
     // function to add styling on brushing
     function updateChart(event) {
-
-        // let newPoints = MID_SCATTER_FRAME.selectAll("circle");
         let extent = event.selection;
 
         myPoints.classed("selected", (d) => { 
-            if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
-                console.log(document.getElementById(d.id))
-            }
             return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
-        
         });
+
+        leftPoints.classed("selected", (d) => {return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)});
+
+        bars.classed("selected", (d))
     };
 
 // create frame for bar chart
@@ -188,7 +180,7 @@ yScaleBar.domain([0, d3.max(bar_data, (d) => {
     return d.Count
 }) + 10])
 
-BAR.selectAll("bars")
+let bars = BAR.selectAll("bars")
     .data(bar_data)
     .enter()
     .append("rect")
@@ -218,17 +210,11 @@ BAR.append("g")
     .call(d3.axisLeft(yScaleBar).ticks(11))
     .attr("font-size", "15px");
 
-
-
-
-    
-
-
-
-
-
-
 });
+
+           // if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
+            //     console.log(document.getElementById(d.id))
+            // }
 
 
 
