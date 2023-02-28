@@ -135,22 +135,30 @@ d3.csv("data/iris.csv").then((data) => {
    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
 };
 
-function isSpecies(brush_coords){
-    console.log(brush_coords.Species)
-}
-
 
     // function to add styling on brushing
     function updateChart(event) {
         let extent = event.selection;
 
         myPoints.classed("selected", (d) => { 
+            // list of visited species , use set
+            const speciesSet = new Set();
+            if (d.Species = "" )
+
             return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
         });
 
         leftPoints.classed("selected", (d) => {return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)});
 
-        bars.classed("selected", (d) => {return d.Species})
+        // each time you add a point or remove a point, iterate through all with loop and check which bars
+        // instead use d3 selectAll myPoints (use ), from there use d3 classed function, conditionally \
+        // if d .species is in set, then return slected 
+        bars.classed("selected", (d) => {return speciesd.Species})
+
+        d3.selectAll(myPoints.Species)
+
+
+       
     };
 
 // create frame for bar chart
