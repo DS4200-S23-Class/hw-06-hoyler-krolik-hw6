@@ -142,8 +142,10 @@ d3.csv("data/iris.csv").then((data) => {
 
         myPoints.classed("selected", (d) => { 
             // // list of visited species , use set
-            // const speciesSet = new Set();
-            // if (d.Species = "virginica" || d.Species =  )
+            const speciesSet = new Set();
+            if (d.Species == "virginica" || d.Species ==  "versicolor" || d.Species == "setosa"){
+                speciesSet.add(d.Species);
+            }
 
             return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
         });
@@ -153,12 +155,8 @@ d3.csv("data/iris.csv").then((data) => {
         // each time you add a point or remove a point, iterate through all with loop and check which bars
         // instead use d3 selectAll myPoints (use ), from there use d3 classed function, conditionally \
         // if d .species is in set, then return slected 
-        bars.classed("selected", (d) => {return speciesd.Species})
+        bars.classed("selected", (d) => {return speciesSet.has(d.Species)})
 
-        d3.selectAll(myPoints.Species)
-
-
-       
     };
 
 // create frame for bar chart
