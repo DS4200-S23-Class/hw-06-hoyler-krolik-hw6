@@ -140,13 +140,14 @@ d3.csv("data/iris.csv").then((data) => {
     function updateChart(event) {
         let extent = event.selection;
 
+        const speciesSet = new Set();
         myPoints.classed("selected", (d) => { 
             // // list of visited species , use set
-            const speciesSet = new Set();
-            if (d.Species == "virginica" || d.Species ==  "versicolor" || d.Species == "setosa"){
+
+            if (isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)){
                 speciesSet.add(d.Species);
             }
-
+        
             return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)
         });
 
