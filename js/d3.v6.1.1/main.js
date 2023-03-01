@@ -113,6 +113,13 @@ d3.csv("data/iris.csv").then((data) => {
                         .attr("font-size", "12px");
 
         
+    /*
+    DS4200
+    HW6
+    Robert Hoyler and Jack Krolik
+    Consulted resource for d3 brushing: https://d3-graph-gallery.com/graph/interactivity_brush.html#realgraph
+    */
+
     // Add brushing
     MID_SCATTER_FRAME
         .call(d3.brush()                 // Add the brush feature using the d3.brush function
@@ -154,6 +161,14 @@ d3.csv("data/iris.csv").then((data) => {
         bars.classed("selected", (d) => {return speciesSet.has(d.Species)})
 
     };
+
+
+/*
+DS4200
+HW6
+Robert Hoyler and Jack Krolik
+Consulted resource for basic bar chart: https://www.tutorialsteacher.com/d3js/create-bar-chart-using-d3js
+*/
 
 // create frame for bar chart
 const BAR = d3.select('.columns')
